@@ -1,0 +1,69 @@
+<!doctype html><html lang="ru"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>3D-позиция ArUco в OpenCV Python: X Y Z, rvec, tvec | ArUco.ru</title>
+<meta name="description" content="Как точно получить 3D-позицию ArUco в Python OpenCV: калибровка, размер маркера, solvePnP IPPE_SQUARE, X/Y/Z, rvec/tvec, ошибка и координаты стола.">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://aruco.ru/learn/pose-estimation/"><meta property="og:type" content="article"><meta property="og:locale" content="ru_RU"><meta property="og:site_name" content="ArUco.ru">
+<meta property="og:title" content="3D-позиция ArUco в OpenCV Python"><meta property="og:description" content="От четырёх углов до X/Y/Z относительно камеры и внешней системы координат стола."><meta property="og:url" content="https://aruco.ru/learn/pose-estimation/">
+<meta name="theme-color" content="#111111"><link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/assets/css/style.css?v=20260820">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","headline":"3D-позиция ArUco в OpenCV Python: X Y Z, rvec, tvec","description":"Точная оценка положения ArUco относительно камеры и внешней системы координат.","inLanguage":"ru-RU","datePublished":"2026-08-15","dateModified":"2026-08-20","mainEntityOfPage":"https://aruco.ru/learn/pose-estimation/","author":{"@type":"Person","name":"Степан Бурмистров","url":"https://t.me/burmistrov_robotics"},"publisher":{"@type":"Organization","name":"ArUco.ru","url":"https://aruco.ru/"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Что означает tvec ArUco?","acceptedAnswer":{"@type":"Answer","text":"tvec — координаты начала системы маркера в оптической системе камеры. При размере маркера в метрах X, Y и Z также получаются в метрах."}},{"@type":"Question","name":"Какой размер маркера указывать в solvePnP?","acceptedAnswer":{"@type":"Answer","text":"Указывают внешнюю сторону чёрного квадратного маркера. Белое безопасное поле вокруг него в размер не входит."}},{"@type":"Question","name":"Как получить координаты ArUco относительно стола?","acceptedAnswer":{"@type":"Answer","text":"Нужно один раз определить преобразование от неподвижной камеры к системе стола по опорному маркеру, затем умножать T_world_camera на T_camera_marker."}}]}]}</script>
+<script src="/assets/js/metrika.js" defer></script><script src="/assets/js/common.js" defer></script></head><body>
+<noscript><div><img src="https://mc.yandex.ru/watch/111624278" style="position:absolute;left:-9999px" alt=""></div></noscript>
+<header class="site-header"><div class="container header-inner"><a class="brand" href="/"><span class="brand-marker"><i></i><i></i><i></i><i></i></span><span><strong>ArUco</strong><b>.ru</b></span></a><button class="menu-btn" type="button" aria-expanded="false" aria-controls="mainNav">Меню</button><nav class="main-nav" id="mainNav"><a href="/generator/">Генератор</a><a href="/detector/">Сканер</a><a href="/charuco/">ChArUco</a><a href="/learn/" class="active">Учебник</a><a href="/examples/">Python</a><a href="/about/">О проекте</a></nav></div></header>
+<main><section class="article-hero"><div class="container"><nav class="breadcrumbs" aria-label="Хлебные крошки"><a href="/">ArUco.ru</a><span>→</span><a href="/learn/">Учебник</a><span>→</span><span>3D-позиция ArUco</span></nav><p class="eyebrow">Pose estimation</p><h1>3D-позиция ArUco: от камеры к координатам стола</h1><p class="lead">ID отвечает на вопрос «что это?». Pose estimation добавляет «где находится?» и «как повёрнуто?» — сначала относительно камеры, затем относительно вашего стенда.</p>
+<div class="hero-actions"><a class="btn btn-yellow" href="/examples/aruco_python_examples.zip" download>Скачать 3D-скрипты</a><a class="btn btn-light" href="/learn/charuco-calibration/">Сначала откалибровать камеру</a></div></div></section>
+<section><div class="container article-wrap"><article class="article">
+<h2 id="inputs">Что необходимо для метрических координат</h2>
+<ol><li><strong>Четыре угла маркера</strong>, найденные <code>ArucoDetector</code>.</li><li><strong>Калибровка камеры</strong>: camera matrix и distortion coefficients для текущего объектива и разрешения.</li><li><strong>Реальный размер маркера</strong>: внешняя сторона чёрного квадрата, без белого поля.</li></ol>
+<p>Без калибровки можно получить приблизительную визуализацию, но точное расстояние и углы будут систематически ошибаться, особенно у краёв кадра.</p>
+
+<h2 id="camera-frame">Система координат камеры OpenCV</h2>
+<div class="table-wrap"><table><thead><tr><th>Ось</th><th>Направление</th><th>Практический смысл</th></tr></thead><tbody><tr><td>X</td><td>вправо по изображению</td><td>маркер правее или левее оптической оси</td></tr><tr><td>Y</td><td>вниз по изображению</td><td>маркер ниже или выше оптической оси</td></tr><tr><td>Z</td><td>вперёд от камеры</td><td>глубина до маркера</td></tr></tbody></table></div>
+<p>Если длина маркера задана в метрах, компоненты <code>tvec</code> также получаются в метрах. Евклидово расстояние до центра — <code>norm(tvec)</code>, а не только Z.</p>
+
+<h2 id="pnp">Почему SOLVEPNP_IPPE_SQUARE</h2>
+<p>Четыре угла задают плоский квадрат. Для такой геометрии OpenCV предоставляет <code>SOLVEPNP_IPPE_SQUARE</code>. 3D-точки должны быть расположены в ожидаемом порядке: верхний левый, верхний правый, нижний правый, нижний левый угол.</p>
+<div class="code-block"><button class="copy-code">Копировать</button><pre><code>half = MARKER_LENGTH / 2
+object_points = np.array([
+    [-half,  half, 0],
+    [ half,  half, 0],
+    [ half, -half, 0],
+    [-half, -half, 0],
+], dtype=np.float32)
+
+ok, rvec, tvec = cv2.solvePnP(
+    object_points, image_points,
+    camera_matrix, dist_coeffs,
+    flags=cv2.SOLVEPNP_IPPE_SQUARE,
+)</code></pre></div>
+<p><code>rvec</code> — вектор Родрига. Для композиции координат его удобнее преобразовать в матрицу: <code>R, _ = cv2.Rodrigues(rvec)</code>.</p>
+
+<h2 id="error">Проверяйте ошибку репроекции</h2>
+<p>После pose спроецируйте 3D-углы обратно на изображение через <code>cv2.projectPoints()</code> и сравните с реально найденными пикселями. Ошибка в пикселях помогает отбрасывать размытые, косые или плохо локализованные наблюдения, прежде чем они попадут в управление роботом.</p>
+<p><a class="btn btn-light" href="/examples/code/04_pose_estimation.py" download>Pose на фотографии</a> <a class="btn btn-light" href="/examples/code/09_marker_pose_live.py" download>Живые X/Y/Z</a></p>
+
+<h2 id="world">Координаты относительно стола или крепления</h2>
+<p>Для установленной на стенде камеры одних координат относительно объектива недостаточно. Нужна внешняя калибровка — положение камеры в системе стола. Положите опорный маркер в известное начало координат, не двигая камеру, и соберите серию измерений:</p>
+<div class="code-block"><button class="copy-code">Копировать</button><pre><code>T_world_marker = T_world_camera @ T_camera_marker</code></pre></div>
+<ul><li><code>T_camera_marker</code> получается из текущих <code>rvec</code> и <code>tvec</code>;</li><li><code>T_world_camera</code> один раз рассчитывается по опорному маркеру и сохраняется;</li><li>результат даёт положение каждого рабочего маркера в постоянных координатах стенда.</li></ul>
+<p>Скрипт <code>10_calibrate_camera_mount.py</code> усредняет много кадров опорного маркера и отбрасывает выбросы. <code>11_marker_pose_world.py</code> применяет сохранённое преобразование к текущим маркерам.</p>
+<p><a class="btn btn-light" href="/examples/code/10_calibrate_camera_mount.py" download>Привязать камеру к столу</a> <a class="btn btn-light" href="/examples/code/11_marker_pose_world.py" download>Получать world XYZ</a></p>
+
+<h2 id="accuracy">Что сильнее всего влияет на точность</h2>
+<ul><li>правильная <a href="/learn/charuco-calibration/">калибровка камеры</a> именно в рабочем разрешении;</li><li>точный физический размер чёрного квадрата после печати;</li><li>резкость и достаточный размер маркера в кадре;</li><li>отсутствие бликов, изгиба бумаги и сильного motion blur;</li><li>жёсткое крепление камеры после внешней калибровки;</li><li>фильтрация выбросов и временное сглаживание, если координаты управляют механизмом.</li></ul>
+<div class="callout"><strong>Важно:</strong> усреднение уменьшает случайный шум, но не исправляет систематическую ошибку от неверного размера маркера или неправильной camera matrix.</div>
+
+<h2 id="ros">Передача в ROS 2</h2>
+<p>Пример <code>13_ros2_marker_pose_publisher.py</code> публикует выбранный маркер как <code>geometry_msgs/PoseStamped</code> в <code>camera_optical_frame</code>. Дальше преобразование в <code>base_link</code>, <code>odom</code> или <code>map</code> удобнее выполнять через TF2.</p>
+<p><a class="btn btn-light" href="/examples/code/13_ros2_marker_pose_publisher.py" download>Скачать ROS 2 publisher</a></p>
+
+<h2 id="faq">Частые вопросы</h2>
+<h3>Какой размер вводить?</h3><p>Сторону чёрного квадрата от внешнего края до внешнего края. Белая quiet zone не входит.</p>
+<h3>Почему Z выглядит правдоподобно, а X/Y плавают?</h3><p>Маленькая ошибка угла заметнее влияет на боковые координаты. Увеличьте маркер в кадре, улучшите резкость и не используйте края кадра без хорошей калибровки.</p>
+<h3>Можно ли получить координаты телефона без camera matrix?</h3><p>Только приближённо по предполагаемому FOV. Для инженерных измерений нужна реальная калибровка выбранной камеры.</p>
+
+<div class="promo-strip"><div><h3>От pose к движению робота</h3><p>В РоботИКС маркеры используются не как отдельная демонстрация, а как часть навигации, захвата объектов и автономного поведения.</p></div><a class="btn btn-yellow" href="https://robotx.su/?utm_source=aruco.ru&amp;utm_medium=referral&amp;utm_campaign=pose_article" target="_blank" rel="noopener" data-goal="to_robotx">Школа робототехники РоботИКС</a></div>
+</article><aside class="article-aside"><div class="toc"><strong>На странице</strong><a href="#inputs">Что нужно</a><a href="#camera-frame">Оси камеры</a><a href="#pnp">solvePnP</a><a href="#error">Ошибка</a><a href="#world">Координаты стола</a><a href="#accuracy">Точность</a><a href="#ros">ROS 2</a><a href="#faq">Вопросы</a><a href="/learn/">← Все материалы</a></div></aside></div></section></main>
+<footer class="site-footer"><div class="container footer-grid"><div><a class="brand footer-brand" href="/"><span class="brand-marker"><i></i><i></i><i></i><i></i></span><span><strong>ArUco</strong><b>.ru</b></span></a><p>Практический русскоязычный ресурс о визуальных маркерах, OpenCV и робототехнике.</p></div><div><h2>Инструменты</h2><a href="/generator/">Генератор ArUco</a><a href="/detector/">Сканер камерой</a><a href="/charuco/">ChArUco</a><a href="/learn/">Учебные материалы</a></div><div><h2>Робототехника</h2><a href="https://robotx.su/?utm_source=aruco.ru&amp;utm_medium=referral&amp;utm_campaign=footer" target="_blank" rel="noopener" data-goal="to_robotx">Школа робототехники РоботИКС</a><a href="https://rosikbot.ru/" target="_blank" rel="noopener" data-goal="to_rosikbot">Роботы ROSIKBOT</a><a href="https://t.me/burmistrov_robotics" target="_blank" rel="noopener" data-goal="to_channel">Канал автора</a></div><div><h2>Проект</h2><a href="/about/">О проекте</a><a href="/privacy/">Конфиденциальность</a><a href="/sources/">Источники</a><span class="muted">© 2026 ArUco.ru</span></div></div></footer>
+<div class="cookie-banner"><p>Сайт использует Яндекс Метрику для аналитики. <a href="/privacy/">Подробнее</a>.</p><button class="btn btn-small btn-yellow js-cookie-accept">Понятно</button></div>
+</body></html>

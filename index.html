@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>ArUco.ru — генератор ArUco, сканер, ChArUco и OpenCV</title>
+<meta name="description" content="Генератор ArUco-маркеров для печати, распознавание через браузер, ChArUco и понятные материалы по OpenCV, Python и робототехнике.">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://aruco.ru/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:site_name" content="ArUco.ru">
+<meta property="og:title" content="ArUco.ru — генератор ArUco, сканер, ChArUco и OpenCV">
+<meta property="og:description" content="Генератор ArUco-маркеров для печати, распознавание через браузер, ChArUco и понятные материалы по OpenCV, Python и робототехнике.">
+<meta property="og:url" content="https://aruco.ru/">
+<meta name="theme-color" content="#111111">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/css/style.css?v=20260820">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"ArUco.ru","url":"https://aruco.ru/","inLanguage":"ru-RU","description":"Генератор ArUco-маркеров, браузерный сканер, ChArUco и учебные материалы по OpenCV и робототехнике."}</script>
+<script src="/assets/js/metrika.js" defer></script>
+<script src="/assets/js/common.js" defer></script>
+
+</head>
+<body>
+<noscript><div><img src="https://mc.yandex.ru/watch/111624278" style="position:absolute; left:-9999px;" alt=""></div></noscript>
+<header class="site-header"><div class="container header-inner">
+<a class="brand" href="/" aria-label="ArUco.ru — на главную"><span class="brand-marker" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span><strong>ArUco</strong><b>.ru</b></span></a>
+<button class="menu-btn" type="button" aria-expanded="false" aria-controls="mainNav">Меню</button>
+<nav class="main-nav" id="mainNav"><a href="/generator/">Генератор</a>
+<a href="/detector/">Сканер</a>
+<a href="/charuco/">ChArUco</a>
+<a href="/learn/">Учебник</a>
+<a href="/examples/">Python</a><a href="/about/">О проекте</a></nav>
+</div></header>
+<main>
+<section class="hero"><div class="container hero-grid">
+<div><p class="eyebrow">Маркеры · OpenCV · робототехника</p>
+<h1>ArUco без магии.</h1>
+<p class="lead">Создавайте маркеры для печати, проверяйте их камерой прямо в браузере и разбирайтесь, как бинарный квадрат превращается в ID, координаты и навигацию робота.</p>
+<div class="hero-actions"><a class="btn btn-yellow" href="/generator/" data-goal="home_generator">Создать маркер</a><a class="btn" href="/detector/" data-goal="home_detector">Распознать камерой</a><a class="btn btn-light" href="/learn/">Разобраться в теории</a></div>
+<div class="tag-row" style="margin-top:22px"><span class="tag">DICT_4X4_250</span><span class="tag">DICT_5X5_250</span><span class="tag">ChArUco</span><span class="tag">Python + OpenCV</span><span class="tag">ROS 2</span></div>
+</div>
+<div class="marker-hero"><div class="marker-demo" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="marker-caption"><span>квадрат → биты → ID</span><span>камера → pose → робот</span></div></div>
+</div></section>
+
+<section class="section section-white"><div class="container">
+<p class="eyebrow">Инструменты</p><h2>Сначала попробуйте</h2>
+<p class="section-intro">Все основные стенды работают без регистрации. Генератор и ChArUco — локально в браузере; сканер может использовать камеру телефона или ноутбука.</p>
+<div class="cards">
+<a class="card card-link" href="/generator/"><div class="card-icon yellow">01</div><p class="kicker">Печать</p><h3>Генератор ArUco</h3><p>Выберите словарь, ID, физический размер и количество копий. Скачайте SVG/PNG или сразу соберите лист для печати.</p><span class="link-arrow">Открыть генератор</span></a>
+<a class="card card-link" href="/detector/"><div class="card-icon green">02</div><p class="kicker">Камера</p><h3>Браузерный сканер</h3><p>Покажите маркер камере или загрузите изображение. Стенд считывает внутреннюю матрицу и сопоставляет её со словарём.</p><span class="link-arrow">Открыть сканер</span></a>
+<a class="card card-link" href="/charuco/"><div class="card-icon blue">03</div><p class="kicker">Калибровка</p><h3>Генератор ChArUco</h3><p>Соберите доску для точной калибровки камеры, получите SVG и готовый Python-код для OpenCV.</p><span class="link-arrow">Создать доску</span></a>
+</div></div></section>
+
+<section class="section"><div class="container two-col">
+<a class="card card-link" href="/learn/charuco-calibration/"><div class="card-icon blue">04</div><p class="kicker">Точность</p><h3>Калибровка камеры на Python</h3><p>Печать ChArUco, автоматическая съёмка кадров, camera matrix, distortion, RMS и проверка результата.</p><span class="link-arrow">Пройти полный цикл</span></a>
+<a class="card card-link" href="/learn/pose-estimation/"><div class="card-icon green">05</div><p class="kicker">3D</p><h3>Позиция маркера в пространстве</h3><p>X/Y/Z относительно камеры, привязка к координатам стола, матрицы преобразования и ROS 2.</p><span class="link-arrow">Разобрать pose estimation</span></a>
+</div></section>
+
+<section class="section"><div class="container two-col">
+<div><p class="eyebrow">Учебник</p><h2>От первого маркера до навигации</h2><p class="section-intro">Материалы построены как короткая практическая траектория: сначала устройство маркера и словари, затем OpenCV, печать, ChArUco и оценка положения.</p><a class="btn" href="/learn/">Открыть все материалы</a></div>
+<div class="stack">
+<a class="card card-link" href="/learn/what-is-aruco/"><h3>Что такое ArUco</h3><p>Зачем нужен чёрный бордюр, где хранится ID и почему поворот не мешает распознаванию.</p></a>
+<a class="card card-link" href="/learn/dictionaries/"><h3>Как выбрать словарь</h3><p>4×4, 5×5, 6×6, 7×7 и число доступных ID: что меняется на практике.</p></a>
+<a class="card card-link" href="/learn/python-opencv/"><h3>ArUco в Python</h3><p>Готовые примеры генерации и распознавания с современным API OpenCV.</p></a>
+</div></div></section>
+
+<section class="section section-dark"><div class="container">
+<p class="eyebrow">ArUco в реальной робототехнике</p><h2>Не только картинка на бумаге</h2>
+<p class="section-intro">Маркеры полезны, когда роботу нужен известный визуальный ориентир: распознать объект, получить ID, связать наблюдение с картой или оценить положение относительно камеры.</p>
+<div class="cards">
+<div class="card"><h3>Учиться</h3><p>На занятиях РоботИКС школьники работают с камерами, Python, микроконтроллерами и автономными роботами.</p><a class="link-arrow" href="https://robotx.su/?utm_source=aruco.ru&amp;utm_medium=referral&amp;utm_campaign=home_robotics" target="_blank" rel="noopener" data-goal="to_robotx">robotx.su</a></div>
+<div class="card"><h3>Запускать на роботе</h3><p>На ROSIKBOT можно переходить от лабораторного примера к ROS 2, навигации и реальной мобильной платформе.</p><a class="link-arrow" href="https://rosikbot.ru/" target="_blank" rel="noopener" data-goal="to_rosikbot">rosikbot.ru</a></div>
+<div class="card"><h3>Следить за разработкой</h3><p>Эксперименты, код, робототехника и разборы задач — в личном канале автора проекта.</p><a class="link-arrow" href="https://t.me/burmistrov_robotics" target="_blank" rel="noopener" data-goal="to_channel">Канал автора</a></div>
+</div></div></section>
+</main>
+<footer class="site-footer"><div class="container footer-grid">
+<div><a class="brand footer-brand" href="/"><span class="brand-marker" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span><strong>ArUco</strong><b>.ru</b></span></a><p>Практический русскоязычный ресурс о визуальных маркерах, OpenCV и робототехнике.</p></div>
+<div><h2>Инструменты</h2><a href="/generator/">Генератор ArUco</a><a href="/detector/">Сканер камерой</a><a href="/charuco/">ChArUco</a><a href="/learn/">Учебные материалы</a></div>
+<div><h2>Робототехника</h2><a href="https://robotx.su/?utm_source=aruco.ru&amp;utm_medium=referral&amp;utm_campaign=footer" target="_blank" rel="noopener" data-goal="to_robotx">Школа робототехники РоботИКС</a><a href="https://rosikbot.ru/" target="_blank" rel="noopener" data-goal="to_rosikbot">Роботы ROSIKBOT</a><a href="https://t.me/burmistrov_robotics" target="_blank" rel="noopener" data-goal="to_channel">Канал автора</a></div>
+<div><h2>Проект</h2><a href="/about/">О проекте</a><a href="/privacy/">Конфиденциальность</a><a href="/sources/">Источники</a><span class="muted">© 2026 ArUco.ru</span></div>
+</div></footer>
+<div class="cookie-banner"><p>Сайт использует Яндекс Метрику для аналитики. Продолжая работу, вы соглашаетесь с использованием cookie. <a href="/privacy/">Подробнее</a>.</p><button class="btn btn-small btn-yellow js-cookie-accept" type="button">Понятно</button></div>
+</body></html>

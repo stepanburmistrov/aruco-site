@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://aruco.ru/</loc><lastmod>2026-08-20</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://aruco.ru/generator/</loc><lastmod>2026-08-20</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://aruco.ru/detector/</loc><lastmod>2026-08-20</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://aruco.ru/charuco/</loc><lastmod>2026-08-20</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://aruco.ru/examples/</loc><lastmod>2026-08-20</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://aruco.ru/learn/</loc><lastmod>2026-08-20</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://aruco.ru/learn/what-is-aruco/</loc><lastmod>2026-08-15</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://aruco.ru/learn/dictionaries/</loc><lastmod>2026-08-15</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://aruco.ru/learn/printing/</loc><lastmod>2026-08-20</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://aruco.ru/learn/python-opencv/</loc><lastmod>2026-08-20</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://aruco.ru/learn/pose-estimation/</loc><lastmod>2026-08-20</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://aruco.ru/learn/charuco-calibration/</loc><lastmod>2026-08-20</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://aruco.ru/3d/</loc><lastmod>2026-08-20</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://aruco.ru/about/</loc><lastmod>2026-08-20</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://aruco.ru/sources/</loc><lastmod>2026-08-20</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+</urlset>
