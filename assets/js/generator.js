@@ -157,6 +157,51 @@
     window.arucoGoal?.("generator_use", {dict: dictName, from, to, copies, outer_mm: outerMm, black_mm: blackMm});
   }
 
+  // Build A4 pages in physical millimetres rather than relying on an
+  // auto-fill grid whose width depends on the browser's screen viewport.
+  const PRINT_WIDTH_MM = 190;  // A4 minus two 10 mm side margins
+  const PRINT_HEIGHT_MM = 270; // 10 mm top margin, 17 mm footer area
+
+  function preparePrintPages() {
+    let pages = document.getElementById("markerPrintPages");
+    if (!pages) {
+      pages = document.createElement("div");
+      pages.id = "markerPrintPages";
+      pages.className = "marker-print-pages";
+      UI.sheet.insertAdjacentElement("afterend", pages);
+    }
+    pages.replaceChildren();
+
+    const outerMm = parseFloat(UI.outerMm.value);
+    if (!Number.isFinite(outerMm) || outerMm <= 0) return;
+    const cols = Math.max(1, Math.floor((PRINT_WIDTH_MM + 1e-6) / outerMm));
+    const rows = Math.max(1, Math.floor((PRINT_HEIGHT_MM + 1e-6) / outerMm));
+    const pageSize = cols * rows;
+    const cards = Array.from(UI.sheet.querySelectorAll(".marker-card"));
+    const allPages = document.createDocumentFragment();
+
+    for (let start = 0; start < cards.length; start += pageSize) {
+      const page = document.createElement("section");
+      page.className = "marker-print-page";
+      const grid = document.createElement("div");
+      grid.className = "marker-print-grid";
+      grid.style.gridTemplateColumns = `repeat(${cols}, ${outerMm}mm)`;
+      for (const card of cards.slice(start, start + pageSize)) {
+        const clone = card.cloneNode(true);
+        clone.querySelector(".marker-download")?.remove();
+        grid.appendChild(clone);
+      }
+      const footer = document.createElement("div");
+      footer.className = "marker-print-page-footer";
+      footer.textContent = "aruco.ru";
+      page.append(grid, footer);
+      allPages.appendChild(page);
+    }
+    pages.appendChild(allPages);
+  }
+
+  window.addEventListener("beforeprint", preparePrintPages);
+
   UI.generateBtn.addEventListener("click", generate);
   UI.printBtn.addEventListener("click", () => {
     window.arucoGoal?.("generator_print", {dict: UI.dict.value});
