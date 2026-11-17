@@ -3,23 +3,23 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>ChArUco Board генератор онлайн — SVG и OpenCV Python | ArUco.ru</title>
-<meta name="description" content="Создайте ChArUco Board для калибровки камеры: размеры в мм, словарь ArUco, SVG для печати и готовый Python-код OpenCV.">
+<title>ChArUco Board генератор онлайн — PDF, SVG и OpenCV Python | ArUco.ru</title>
+<meta name="description" content="Создайте ChArUco Board для калибровки камеры: размеры в мм, словарь ArUco, PDF с полями, SVG и готовый Python-код OpenCV.">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <link rel="canonical" href="https://aruco.ru/charuco/">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="ru_RU">
 <meta property="og:site_name" content="ArUco.ru">
-<meta property="og:title" content="ChArUco Board генератор онлайн — SVG и OpenCV Python | ArUco.ru">
-<meta property="og:description" content="Создайте ChArUco Board для калибровки камеры: размеры в мм, словарь ArUco, SVG для печати и готовый Python-код OpenCV.">
+<meta property="og:title" content="ChArUco Board генератор онлайн — PDF, SVG и OpenCV Python | ArUco.ru">
+<meta property="og:description" content="Создайте ChArUco Board для калибровки камеры: размеры в мм, словарь ArUco, PDF с полями, SVG и готовый Python-код OpenCV.">
 <meta property="og:url" content="https://aruco.ru/charuco/">
 <meta name="theme-color" content="#111111">
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="/assets/css/style.css?v=20260820c">
+<link rel="stylesheet" href="/assets/css/style.css?v=20261117-charuco">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Генератор ChArUco Board","applicationCategory":"DeveloperApplication","operatingSystem":"Web","url":"https://aruco.ru/charuco/","offers":{"@type":"Offer","price":"0","priceCurrency":"RUB"}}</script>
 <script src="/assets/js/metrika.js" defer></script>
 <script src="/assets/js/common.js" defer></script>
-<script src="/assets/js/dicts.js" defer></script><script src="/assets/js/charuco.js?v=20260820b" defer></script>
+<script src="/assets/js/dicts.js" defer></script><script src="/assets/js/charuco.js?v=20261117-charuco" defer></script>
 </head>
 <body class="tool-charuco">
 <noscript><div><img src="https://mc.yandex.ru/watch/111624278" style="position:absolute; left:-9999px;" alt=""></div></noscript>
@@ -34,21 +34,23 @@
 </div></header>
 <main>
 <section class="article-hero"><div class="container"><nav class="breadcrumbs" aria-label="Хлебные крошки"><a href="/">ArUco.ru</a><span>→</span><span>ChArUco</span></nav><p class="eyebrow">Калибровка камеры</p><h1>Генератор ChArUco Board</h1>
-<p class="lead">Настройте количество клеток, размер клетки и словарь. Размер маркера внутри клетки рассчитывается автоматически. Получите масштабируемый SVG и готовый код OpenCV для такой же доски.</p></div></section>
+<p class="lead">Настройте количество клеток, размер клетки и словарь. Размер маркера внутри клетки рассчитывается автоматически. Скачайте PDF с полями для печати, масштабируемый SVG и готовый код OpenCV для такой же доски.</p></div></section>
 <section class="lab-shell"><div class="container lab-grid">
 <aside class="panel controls">
 <div class="control"><label for="charucoDict">Словарь</label><select id="charucoDict"><option>DICT_4X4_250</option><option>DICT_5X5_250</option><option>DICT_6X6_250</option><option>DICT_7X7_250</option></select></div>
-<div class="two-col"><div class="control"><label for="squaresX">Клеток X</label><input id="squaresX" type="number" min="3" max="16" value="5"></div><div class="control"><label for="squaresY">Клеток Y</label><input id="squaresY" type="number" min="3" max="20" value="7"></div></div>
-<div class="control"><label for="squareMm">Клетка, мм</label><input id="squareMm" type="number" min="10" max="80" step="0.5" value="35"><small>Маркер занимает фиксированные 70% стороны клетки и отдельно не настраивается.</small></div>
+<div class="two-col"><div class="control"><label for="squaresX">Клеток X</label><input id="squaresX" type="number" min="2" max="500" value="5"></div><div class="control"><label for="squaresY">Клеток Y</label><input id="squaresY" type="number" min="2" max="500" value="7"></div></div>
+<div class="control"><label for="squareMm">Клетка, мм</label><input id="squareMm" type="number" min="0.001" max="10000" step="any" value="35"><small>Маркер занимает фиксированные 70% стороны клетки и отдельно не настраивается.</small></div>
 <div class="control"><label for="startId">Начальный ID</label><input id="startId" type="number" min="0" max="249" value="0"></div>
-<div class="button-row"><button class="btn btn-yellow" id="downloadCharuco" type="button">Скачать SVG</button><button class="btn btn-light" id="printCharuco" type="button">Печать / PDF</button></div>
-<div class="status" id="charucoStatus"></div>
+<div class="control"><label for="charucoPaper">Лист для печати · вертикальный</label><select id="charucoPaper"><option value="a4">A4 · 210 × 297 мм</option><option value="a3">A3 · 297 × 420 мм</option><option value="custom">По размеру доски</option></select></div>
+<div class="control"><label for="charucoMargin">Поля, мм</label><input id="charucoMargin" type="number" min="5" max="100" value="10"><small>Размер доски сохраняется точно. Большой лист можно напечатать в типографии.</small></div>
+<div class="button-row"><button class="btn btn-yellow" id="pdfCharuco" type="button">Скачать PDF</button><button class="btn btn-light" id="downloadCharuco" type="button">Скачать SVG</button><button class="btn btn-light" id="printCharuco" type="button">Печать / PDF</button></div>
+<div class="status" id="charucoStatus" role="status" aria-live="polite"></div>
 </aside>
 <div class="panel"><div class="charuco-preview" id="charucoPreview"></div></div></div></section>
 <section class="section section-white"><div class="container article">
 <h2>Тот же Board в Python</h2><div class="code-block"><button class="copy-code" type="button">Копировать</button><pre><code id="charucoCode"></code></pre></div>
 <p>Если нужна высокая точность углов для калибровки, ChArUco обычно удобнее одиночных ArUco: шахматные углы можно уточнять точнее, а маркеры помогают идентифицировать видимую часть доски.</p>
-<div class="callout"><strong>Печатайте только в масштабе 100%.</strong> Генератор показывает физический размер доски и предупреждает, если она не помещается на A4. Уменьшение «под размер страницы» делает указанные размеры неверными.</div>
+<div class="callout"><strong>Печатайте только в масштабе 100%.</strong> Генератор показывает физический размер доски и предупреждает, если она не помещается на выбранный лист. Уменьшение «под размер страницы» делает указанные размеры неверными.</div>
 <p><a class="link-arrow" href="/learn/charuco-calibration/">Полный цикл калибровки камеры с готовыми Python-скриптами</a></p>
 </div></section>
 </main>

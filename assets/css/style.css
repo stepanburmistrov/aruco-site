@@ -139,3 +139,14 @@ input[type=number],input[type=text],select,textarea{width:100%;padding:11px 12px
 
 /* Physical A4 marker pages, with zero printer margins; the sheet supplies 10 mm. */
 @page aruco-marker-a4{size:A4 portrait;margin:0}
+
+/* ChArUco uses its own physical sheet, independent of the screen preview. */
+#charucoPrintPage{display:none}
+.tool-charuco .charuco-preview svg{width:100%;height:auto}
+.tool-charuco .btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+@media print{
+ body.tool-charuco>*:not(#charucoPrintPage){display:none!important}
+ body.tool-charuco #charucoPrintPage{page:charuco-sheet;display:block!important;position:relative;box-sizing:border-box;margin:0;print-color-adjust:exact;-webkit-print-color-adjust:exact}
+ body.tool-charuco #charucoPrintPage .charuco-board{display:block;max-width:none;box-shadow:none;margin:0 auto}
+ .charuco-print-footer{position:absolute;bottom:7mm;left:0;right:0;text-align:center;font:9pt Arial,sans-serif;color:#555}
+}
